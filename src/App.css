@@ -1,0 +1,15 @@
+.screen{
+  
+}
+
+.cam{
+
+}
+
+.cam__img{
+  position: absolute;
+}
+
+.cam__canvas{
+  position: absolute;
+}
