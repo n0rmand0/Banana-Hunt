@@ -3,7 +3,7 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import * as tf from "@tensorflow/tfjs";
 import { React, useState, useEffect, useRef } from "react";
 
-function Cam() {
+function Cam(props) {
   const [model, setModel] = useState();
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState();
@@ -47,11 +47,13 @@ function Cam() {
   };
 
   let progress = 0;
-  let items = [{ class: "bananna", message: "Show me a fork." }];
+  let items = ["cell phone"];
 
   // prediction
   async function startPrediction() {
     console.log("predicting...");
+    setMessage("Show me a " + items[progress]);
+
     var cnvs = document.getElementById("myCanvas");
     if (cnvs) {
       var ctx = cnvs.getContext("2d");
@@ -66,16 +68,18 @@ function Cam() {
       //Start prediction
       const predictions = await model.detect(document.getElementById("img"));
       if (predictions.length > 0) {
-        console.log(predictions);
+        // console.log(predictions);
         predictions.map((p) => {
           if (p.score > 0.8) {
+            console.log("detected", p.class);
+
             //Threshold is 0.8 or 80%
-            if (items[progress].class === p.class) {
+            if (p.class && items[progress] === p.class) {
+              console.log("Found", p.class);
+              drawPrediction(p);
               flashCorrect();
-              setMessage(items[progress].message);
+              setMessage("Show me a " + items[progress]);
             }
-            drawPrediction(p);
-            console.log("detected");
           }
         });
       }
@@ -111,16 +115,24 @@ function Cam() {
 
   function flashCorrect() {
     setCorrect(true);
-    setTimeout(() => setCorrect(false), 3000);
+    setTimeout(() => {
+      setCorrect(false);
+      progress++;
+      if (progress === items.length) {
+        // go to next challenge
+        props.setProgress(2);
+      }
+    }, 8000);
   }
 
   let loader = <div className="screen screen--loader">Loading...</div>;
-  let correctScreen = (
-    <div className="screen screen--correct">You found it!</div>
-  );
   let cam = (
     <div className="screen screen--cam">
       <div className="cam">
+        {correct && <div className="cam__correct">You got it!</div>}
+        <span className="cam__message">
+          {progress + 1}. {message}
+        </span>
         <div className="cam__img">
           <Webcam
             audio={false}
@@ -131,7 +143,6 @@ function Cam() {
             videoConstraints={videoConstraints}
           />
         </div>
-
         <div className="cam__canvas">
           <canvas
             id="myCanvas"
@@ -143,11 +154,7 @@ function Cam() {
       </div>
     </div>
   );
-  return (
-    <>
-      {loading ? loader : cam} {correct && <correctScreen />}
-    </>
-  );
+  return <>{loading ? loader : cam}</>;
 }
 
 export default Cam;
