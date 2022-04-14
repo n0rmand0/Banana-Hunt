@@ -23,6 +23,7 @@
   position: absolute;
   z-index: 99;
   background: #fff;
+  transform: scaleX(1);
   animation: correct 6s ease-out both;
 }
 

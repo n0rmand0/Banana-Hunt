@@ -48,15 +48,11 @@ function Cam(props) {
   function next() {
     props.setCorrect(true);
     progress++;
+    setItem(items[progress]);
+
     if (progress === items.length) {
-      props.setCorrect(true);
       // go to next challenge
       props.setProgress(3);
-    } else {
-      setTimeout(() => {
-        // setProgress(next);
-        setItem(items[progress]);
-      }, 4000);
     }
   }
 
@@ -127,7 +123,7 @@ function Cam(props) {
     //Rerun prediction by timeout
     setTimeout(function () {
       startPrediction(item);
-    }, 2000);
+    }, 1000);
   }
 
   let loader = (
