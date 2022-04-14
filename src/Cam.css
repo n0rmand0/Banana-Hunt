@@ -1,0 +1,20 @@
+
+#cam{
+
+}
+.cam__message{
+  position: absolute;
+  z-index: 99;
+}
+.cam__correct{
+  position: absolute;
+  z-index: 99;
+}
+.cam__img{
+  position: absolute;
+  transform: scaleX(-1);
+}
+
+.cam__canvas{
+  position: absolute;
+}

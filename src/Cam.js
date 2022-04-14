@@ -2,12 +2,18 @@ import Webcam from "react-webcam";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import * as tf from "@tensorflow/tfjs";
 import { React, useState, useEffect, useRef } from "react";
+import "./Cam.css";
 
 function Cam(props) {
+  // let items = ["banana", "cell phone"];
+  let items = ["person"];
+  let progress = 0;
+
   const [model, setModel] = useState();
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState();
+  const [loaded, setLoaded] = useState();
   const [correct, setCorrect] = useState();
+  // const [progress, setProgress] = useState(0);
+  const [item, setItem] = useState(items[0]);
 
   async function loadModel() {
     console.log("loading...");
@@ -29,12 +35,17 @@ function Cam(props) {
 
   useEffect(() => {
     if (model) {
-      console.log(model);
-      setLoading(false);
-
-      startPrediction();
+      document.getElementById("img").onloadeddata = (event) => {
+        startPrediction(item);
+        setLoaded(true);
+        console.log("Video loaded.");
+      };
     }
   }, [model]);
+
+  // useEffect(() => {
+  //   item && startPrediction(item);
+  // }, [item]);
 
   // // Webcam:
   const webcamRef = useRef(null);
@@ -43,19 +54,20 @@ function Cam(props) {
   const videoConstraints = {
     height: 1080,
     width: 1920,
-    facingMode: "environment",
+    facingMode: "user",
   };
 
-  let progress = 0;
-  let items = ["cell phone"];
-
   // prediction
-  async function startPrediction() {
-    console.log("predicting...");
-    setMessage("Show me a " + items[progress]);
+  let found = false;
+
+  async function startPrediction(curItem) {
+    console.log("Looking for ", items[progress], "...", progress);
 
     var cnvs = document.getElementById("myCanvas");
-    if (cnvs) {
+    // console.log(cnvs, model);
+
+    if (cnvs && model) {
+      // ensure canvas and webcam are loaded
       var ctx = cnvs.getContext("2d");
       //Clear the canvas for each prediction
       ctx.clearRect(
@@ -71,90 +83,93 @@ function Cam(props) {
         // console.log(predictions);
         predictions.map((p) => {
           if (p.score > 0.8) {
+            //Threshold is 0.8 or 80%
             console.log("detected", p.class);
 
-            //Threshold is 0.8 or 80%
             if (p.class && items[progress] === p.class) {
               console.log("Found", p.class);
-              drawPrediction(p);
-              flashCorrect();
-              setMessage("Show me a " + items[progress]);
+              //Extracting the coordinate and the bounding box information
+              let bboxLeft = p.bbox[0];
+              let bboxTop = p.bbox[1];
+              let bboxWidth = p.bbox[2];
+              let bboxHeight = p.bbox[3] - bboxTop;
+              // console.log("bboxLeft: " + bboxLeft);
+              // console.log("bboxTop: " + bboxTop);
+              // console.log("bboxWidth: " + bboxWidth);
+              // console.log("bboxHeight: " + bboxHeight);
+              //Drawing begin
+              ctx.beginPath();
+              ctx.font = "28px Arial";
+              ctx.fillStyle = "#FF00FF";
+              ctx.fillText(
+                p.class + ": " + Math.round(parseFloat(p.score) * 100) + "%",
+                bboxLeft,
+                bboxTop
+              );
+              ctx.rect(bboxLeft, bboxTop, bboxWidth, bboxHeight);
+              ctx.strokeStyle = "#FF00FF";
+              ctx.lineWidth = 6;
+              ctx.stroke();
+
+              next();
             }
           }
         });
       }
     }
     //Rerun prediction by timeout
-    setTimeout(() => startPrediction(), 2000);
-
-    function drawPrediction(p) {
-      //Extracting the coordinate and the bounding box information
-      let bboxLeft = p.bbox[0];
-      let bboxTop = p.bbox[1];
-      let bboxWidth = p.bbox[2];
-      let bboxHeight = p.bbox[3] - bboxTop;
-      // console.log("bboxLeft: " + bboxLeft);
-      // console.log("bboxTop: " + bboxTop);
-      // console.log("bboxWidth: " + bboxWidth);
-      // console.log("bboxHeight: " + bboxHeight);
-      //Drawing begin
-      ctx.beginPath();
-      ctx.font = "28px Arial";
-      ctx.fillStyle = "#FF00FF";
-      ctx.fillText(
-        p.class + ": " + Math.round(parseFloat(p.score) * 100) + "%",
-        bboxLeft,
-        bboxTop
-      );
-      ctx.rect(bboxLeft, bboxTop, bboxWidth, bboxHeight);
-      ctx.strokeStyle = "#FF00FF";
-      ctx.lineWidth = 6;
-      ctx.stroke();
-    }
+    setTimeout(function () {
+      startPrediction(item);
+    }, 2000);
   }
 
-  function flashCorrect() {
+  function next() {
     setCorrect(true);
     setTimeout(() => {
-      setCorrect(false);
       progress++;
+      setCorrect(false);
+      // setProgress(next);
+      setItem(items[progress]);
       if (progress === items.length) {
         // go to next challenge
-        props.setProgress(2);
+        props.setProgress(3);
       }
-    }, 8000);
+    }, 5000);
   }
 
   let loader = <div className="screen screen--loader">Loading...</div>;
   let cam = (
-    <div className="screen screen--cam">
-      <div className="cam">
-        {correct && <div className="cam__correct">You got it!</div>}
-        <span className="cam__message">
-          {progress + 1}. {message}
-        </span>
-        <div className="cam__img">
-          <Webcam
-            audio={false}
-            id="img"
-            ref={webcamRef}
-            screenshotQuality={1}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-          />
-        </div>
-        <div className="cam__canvas">
-          <canvas
-            id="myCanvas"
-            width={videoWidth}
-            height={videoHeight}
-            style={{ backgroundColor: "transparent" }}
-          />
-        </div>
+    <div id="cam" className="screen">
+      {correct && <div className="cam__correct">You got it!</div>}
+      <span className="cam__message">
+        {progress + 1}. Show me a {item}
+      </span>
+      <div className="cam__img">
+        <Webcam
+          audio={false}
+          id="img"
+          ref={webcamRef}
+          screenshotQuality={1}
+          screenshotFormat="image/jpeg"
+          videoConstraints={videoConstraints}
+        />
+      </div>
+      <div className="cam__canvas">
+        <canvas
+          id="myCanvas"
+          width={videoWidth}
+          height={videoHeight}
+          style={{ backgroundColor: "transparent" }}
+        />
       </div>
     </div>
   );
-  return <>{loading ? loader : cam}</>;
+  return (
+    <>
+      {!loaded && loader}
+      {cam}
+    </>
+  );
 }
 
 export default Cam;

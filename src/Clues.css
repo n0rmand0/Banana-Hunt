@@ -1,0 +1,18 @@
+#clues{
+
+}
+
+.clue{
+    width: 16em;
+    height: 20em;
+    overflow: hidden;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+.clue + .clue {
+    margin-left: 4em;
+}
+
+.clue img {
+    height: 100%;
+}
