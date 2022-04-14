@@ -15,7 +15,9 @@ function App() {
     "POOPALICIOUS!",
     "Good Job!",
     "Correct!",
-    "YOU WIN 100 CHOCOLATE!",
+    "Keep Going!",
+    "Smart Bunny!",
+    "CHIKA CHIKA BOOM!!",
   ];
 
   const [progress, setProgress] = useState(0);

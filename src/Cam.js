@@ -5,7 +5,19 @@ import { React, useState, useEffect, useRef } from "react";
 import "./Cam.css";
 
 function Cam(props) {
-  let items = ["banana", "cell phone"];
+  let items = [
+    "banana",
+    "toothbrush",
+    "remote",
+    "bottle",
+    "cell phone",
+    "book",
+    "car",
+    // "train", //??
+    "cat",
+    "horse",
+    "zebra",
+  ];
   // let items = ["person"];
   let progress = 0;
 
@@ -89,7 +101,7 @@ function Cam(props) {
       if (predictions.length > 0) {
         // console.log(predictions);
         predictions.map((p) => {
-          if (p.score > 0.8) {
+          if (p.score > 0.7) {
             //Threshold is 0.8 or 80%
             console.log("detected", p.class);
 
@@ -133,9 +145,8 @@ function Cam(props) {
   );
   let cam = (
     <div id="cam" className="screen">
-      <span className="cam__message">
-        {progress + 1}. Show me a {item}
-      </span>
+      <span className="cam__message">Show me a {item}</span>
+      <span className="cam__number">{progress + 1}</span>
       <div className="cam__vid">
         <Webcam
           audio={false}
@@ -154,7 +165,9 @@ function Cam(props) {
           style={{ backgroundColor: "transparent" }}
         />
       </div>
-      <div className="cam__img"></div>
+      <div className="cam__img">
+        <img src="/bunny.png"></img>
+      </div>
     </div>
   );
   return (

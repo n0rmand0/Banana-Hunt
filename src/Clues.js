@@ -5,14 +5,33 @@ import "./Clues.css";
 function Clues(props) {
   return (
     <div id="clues" className="screen">
-      <div className="clue clue__1">
-        <img src="/img.png"></img>
+      <div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
       </div>
-      <div className="clue clue__2">
-        <img src="/img.png"></img>
-      </div>
-      <div className="clue clue__3">
-        <img src="/img.png"></img>
+      <div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
+        <div className="clue">
+          <img src="/img.png"></img>
+        </div>
       </div>
     </div>
   );

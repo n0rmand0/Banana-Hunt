@@ -1,4 +1,6 @@
 #clues {
+  flex-wrap: wrap;
+  align-content: center;
   background: linear-gradient(
     175deg,
     rgba(183, 215, 132, 1) 0%,
@@ -6,9 +8,15 @@
   );
 }
 
+#clues > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .clue {
-  width: 12em;
-  height: 16em;
+  width: 10em;
+  height: 12em;
+  margin: 1.5em 0;
   overflow: hidden;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
 }
