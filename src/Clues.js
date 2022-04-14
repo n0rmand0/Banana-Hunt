@@ -7,30 +7,30 @@ function Clues(props) {
     <div id="clues" className="screen">
       <div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img1.jpg"></img>
         </div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img2.jpg"></img>
         </div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img3.jpg"></img>
         </div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img4.jpg"></img>
         </div>
       </div>
       <div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img5.jpg"></img>
         </div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img6.jpg"></img>
         </div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img7.jpg"></img>
         </div>
         <div className="clue">
-          <img src="/img.png"></img>
+          <img src="/img8.jpg"></img>
         </div>
       </div>
     </div>
