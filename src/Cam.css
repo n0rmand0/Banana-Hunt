@@ -1,20 +1,71 @@
-
-#cam{
-
-}
-.cam__message{
+#cam,
+#cam-loader {
+  background: linear-gradient(
+    175deg,
+    rgba(255, 212, 229, 1) 0%,
+    rgba(255, 212, 229, 0.2) 100%
+  );
   position: absolute;
+}
+
+#cam-loader {
+  background: #fff;
+  /* background: linear-gradient(175deg, rgba(255, 212, 229,1) 0%, rgba(255, 212, 229,1) 100%); */
   z-index: 99;
 }
-.cam__correct{
+
+#cam-loader h1 {
+  color: rgba(255, 212, 229, 1);
+  font-size: 4em;
+  text-shadow: none;
+}
+
+.cam__message {
   position: absolute;
   z-index: 99;
+  background: #fff;
+  padding: 0.5em;
+  max-width: 12em;
+  font-size: 2em;
+  color: #555;
+  font-weight: bold;
+  border-radius: 0.5em;
+  left: 60%;
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
-.cam__img{
+
+.cam__vid,
+.cam__canvas,
+.cam__img {
   position: absolute;
+  width: 50%;
+  left: 15%;
+}
+
+.cam__vid {
   transform: scaleX(-1);
+  z-index: 2;
+}
+.cam__vid video {
+  width: 100%;
 }
 
-.cam__canvas{
-  position: absolute;
+.cam__img {
+  height: 100vh;
+  background: #fff;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(0, 0px);
+  }
+  50% {
+    transform: translate(0, 15px);
+  }
+  100% {
+    transform: translate(0, -0px);
+  }
 }

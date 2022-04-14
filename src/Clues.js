@@ -1,7 +1,8 @@
 // import logo from "./logo.svg";
 import "./Clues.css";
+// import { React, useState, useEffect, useRef } from "react";
 
-function Clues() {
+function Clues(props) {
   return (
     <div id="clues" className="screen">
       <div className="clue clue__1">

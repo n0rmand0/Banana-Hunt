@@ -5,14 +5,12 @@ import { React, useState, useEffect, useRef } from "react";
 import "./Cam.css";
 
 function Cam(props) {
-  // let items = ["banana", "cell phone"];
-  let items = ["person"];
+  let items = ["banana", "cell phone"];
+  // let items = ["person"];
   let progress = 0;
 
   const [model, setModel] = useState();
   const [loaded, setLoaded] = useState();
-  const [correct, setCorrect] = useState();
-  // const [progress, setProgress] = useState(0);
   const [item, setItem] = useState(items[0]);
 
   async function loadModel() {
@@ -47,6 +45,21 @@ function Cam(props) {
   //   item && startPrediction(item);
   // }, [item]);
 
+  function next() {
+    props.setCorrect(true);
+    progress++;
+    if (progress === items.length) {
+      props.setCorrect(true);
+      // go to next challenge
+      props.setProgress(3);
+    } else {
+      setTimeout(() => {
+        // setProgress(next);
+        setItem(items[progress]);
+      }, 4000);
+    }
+  }
+
   // // Webcam:
   const webcamRef = useRef(null);
   const [videoWidth, setVideoWidth] = useState(960);
@@ -58,8 +71,6 @@ function Cam(props) {
   };
 
   // prediction
-  let found = false;
-
   async function startPrediction(curItem) {
     console.log("Looking for ", items[progress], "...", progress);
 
@@ -89,27 +100,23 @@ function Cam(props) {
             if (p.class && items[progress] === p.class) {
               console.log("Found", p.class);
               //Extracting the coordinate and the bounding box information
-              let bboxLeft = p.bbox[0];
-              let bboxTop = p.bbox[1];
-              let bboxWidth = p.bbox[2];
-              let bboxHeight = p.bbox[3] - bboxTop;
-              // console.log("bboxLeft: " + bboxLeft);
-              // console.log("bboxTop: " + bboxTop);
-              // console.log("bboxWidth: " + bboxWidth);
-              // console.log("bboxHeight: " + bboxHeight);
-              //Drawing begin
-              ctx.beginPath();
-              ctx.font = "28px Arial";
-              ctx.fillStyle = "#FF00FF";
-              ctx.fillText(
-                p.class + ": " + Math.round(parseFloat(p.score) * 100) + "%",
-                bboxLeft,
-                bboxTop
-              );
-              ctx.rect(bboxLeft, bboxTop, bboxWidth, bboxHeight);
-              ctx.strokeStyle = "#FF00FF";
-              ctx.lineWidth = 6;
-              ctx.stroke();
+              // let bboxLeft = p.bbox[0];
+              // let bboxTop = p.bbox[1];
+              // let bboxWidth = p.bbox[2];
+              // let bboxHeight = p.bbox[3] - bboxTop;
+              // //Drawing begin
+              // ctx.beginPath();
+              // ctx.font = "28px Arial";
+              // ctx.fillStyle = "#FF00FF";
+              // ctx.fillText(
+              //   p.class + ": " + Math.round(parseFloat(p.score) * 100) + "%",
+              //   bboxLeft,
+              //   bboxTop
+              // );
+              // ctx.rect(bboxLeft, bboxTop, bboxWidth, bboxHeight);
+              // ctx.strokeStyle = "#FF00FF";
+              // ctx.lineWidth = 6;
+              // ctx.stroke();
 
               next();
             }
@@ -123,28 +130,17 @@ function Cam(props) {
     }, 2000);
   }
 
-  function next() {
-    setCorrect(true);
-    setTimeout(() => {
-      progress++;
-      setCorrect(false);
-      // setProgress(next);
-      setItem(items[progress]);
-      if (progress === items.length) {
-        // go to next challenge
-        props.setProgress(3);
-      }
-    }, 5000);
-  }
-
-  let loader = <div className="screen screen--loader">Loading...</div>;
+  let loader = (
+    <div id="cam-loader" className="screen">
+      <h1>Loading...</h1>
+    </div>
+  );
   let cam = (
     <div id="cam" className="screen">
-      {correct && <div className="cam__correct">You got it!</div>}
       <span className="cam__message">
         {progress + 1}. Show me a {item}
       </span>
-      <div className="cam__img">
+      <div className="cam__vid">
         <Webcam
           audio={false}
           id="img"
@@ -162,12 +158,13 @@ function Cam(props) {
           style={{ backgroundColor: "transparent" }}
         />
       </div>
+      <div className="cam__img"></div>
     </div>
   );
   return (
     <>
-      {!loaded && loader}
       {cam}
+      {!loaded && loader}
     </>
   );
 }

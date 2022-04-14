@@ -15,7 +15,11 @@ function Code(props) {
     console.log("validate...", key1, key2, key3);
     if (key1 === "1" && key2 === "2" && key3 === "3") {
       console.log("correct");
-      props.setProgress(2);
+      setTimeout(() => {
+        // setError(false);
+        props.setCorrect(true);
+        props.setProgress(2);
+      }, 500);
     } else {
       if (key1 && key2 && key3) {
         setError(true);

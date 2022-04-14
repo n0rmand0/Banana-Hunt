@@ -1,4 +1,7 @@
 #code{
+    background: linear-gradient(175deg, rgba(224, 205, 255,1)
+    0%, rgba(224, 205, 255,.2)
+    100%);
 
 }
 
@@ -9,6 +12,13 @@
     border-radius: .1em;
     text-align: center;
     caret-color: transparent;
+    border: solid 2px #fff;
+
+}
+
+#code input:focus {
+    outline: none;
+    border: solid 3px rgb(199, 177, 234);
 }
 
 #code.error input {

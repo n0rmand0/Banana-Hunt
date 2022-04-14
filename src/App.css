@@ -1,15 +1,46 @@
-.screen{
+.screen {
+  position: absolute;
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  background: rgb(189,232,239);
-  background: linear-gradient(175deg, rgba(189,232,239,1) 0%, rgba(237,249,251,1) 100%);
+  background: rgb(189, 232, 239);
+  background: linear-gradient(
+    175deg,
+    rgba(189, 232, 239, 1) 0%,
+    rgba(237, 249, 251, 1) 100%
+  );
 }
 
 .screen h1 {
   font-size: 8em;
-  text-shadow: 0px .25em 2em #74afb7;
+  text-shadow: 0px 0.25em 2em #74afb7;
+}
+
+#correct {
+  position: absolute;
+  z-index: 99;
+  background: #fff;
+  animation: correct 6s ease-out both;
+}
+
+#correct h1 {
+  color: rgba(183, 215, 132, 1);
+  max-width: 80%;
+  margin: 0 1em;
+  text-align: center;
+}
+
+@keyframes correct {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  10%,
+  20%,
+  70% {
+    opacity: 100;
+  }
 }
